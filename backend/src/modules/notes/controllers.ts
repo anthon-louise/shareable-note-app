@@ -44,6 +44,7 @@ export const getNotes = async (req: Request, res: Response, next: NextFunction) 
             ORDER BY updated_at DESC
             `, [userId]);
 
+
         res.json({
             success: true,
             notes: result.rows
@@ -57,7 +58,24 @@ export const getNoteById = async (req: Request, res: Response, next: NextFunctio
     try {
         const userId = (req as any).user.id;
 
-        
+        const noteId = req.params.id;
+
+        const result: QueryResult<Note> = await pool.query(`
+            SELECT *
+            FROM notes
+            WHERE user_id=$1 AND id=$2
+            `, [userId, noteId]);
+
+        if (result.rows.length === 0) {
+            const error: any = new Error("Note not found");
+            error.status = 404;
+            return next(error)
+        }
+
+        res.json({
+            success: true,
+            note: result.rows[0]
+        });
     } catch (err) {
         next(err)
     }
