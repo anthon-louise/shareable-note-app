@@ -56,6 +56,7 @@ const Note = () => {
 
             {error && <p style={{color: "red"}}>{error}</p>}
 
+            <button onClick={() => navigate("/create")}>Create note</button>
             <button onClick={handleLogout} disabled={loadingLogout}>Logout</button>
             
             {notes.length === 0 && <p>No notes yet.</p>}
