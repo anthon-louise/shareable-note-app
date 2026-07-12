@@ -127,3 +127,15 @@ export const me = async (req: Request, res: Response, next: NextFunction) => {
         next(err);
     }
 };
+
+export const logout = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        res.clearCookie("token");
+        res.json({
+            success: true,
+            message: "Logged out"
+        })
+    } catch (err) {
+        next(err);
+    }
+}

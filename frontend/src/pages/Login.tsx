@@ -1,7 +1,9 @@
 import { useState } from "react";
 import api from "../api/axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -19,7 +21,8 @@ const Login = () => {
 
             await api.post("/api/users/login", {email, password});
             setMessage("User logged in");
-            setTimeout(() => setMessage(""), 2500);
+            setTimeout(() => navigate("/"), 1000);
+            setTimeout(() => setMessage(""), 1000);
         } catch (err: any) {
             setError(err.response?.data?.error?.message || "Login failed");
             setTimeout(() => setError(""), 2500);
