@@ -32,3 +32,24 @@ export const createNote = async (req: Request, res: Response, next: NextFunction
         next(err);
     }
 };
+
+export const getNotes = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = (req as any).user.id;
+
+        const result: QueryResult<Note> = await pool.query(`
+            SELECT id, user_id, title, content, created_at, updated_at
+            FROM notes
+            WHERE user_id=$1
+            ORDER BY updated_at DESC
+            `, [userId]);
+
+        res.json({
+            success: true,
+            notes: result.rows
+        })
+    } catch (err) {
+        next(err);
+    }
+}
+
