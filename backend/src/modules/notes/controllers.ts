@@ -57,7 +57,6 @@ export const getNotes = async (req: Request, res: Response, next: NextFunction) 
 export const getNoteById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = (req as any).user.id;
-
         const noteId = req.params.id;
 
         const result: QueryResult<Note> = await pool.query(`
@@ -79,4 +78,32 @@ export const getNoteById = async (req: Request, res: Response, next: NextFunctio
     } catch (err) {
         next(err)
     }
-}
+};
+
+export const updateNote = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = (req as any).user.id;
+        const noteId = req.params.id;
+        const validatedNote = noteSchema.parse(req.body);
+
+        const result: QueryResult<Note> = await pool.query(`
+            UPDATE notes
+            SET title=$1, content=$2
+            WHERE user_id=$3 AND id=$4
+            RETURNING id, user_id, title, content, created_at, updated_at
+            `, [validatedNote.title, validatedNote.content, userId, noteId]);
+
+        if (result.rows.length === 0) {
+            const error: any = new Error("Note not found");
+            error.status = 404;
+            return next(error);
+        }
+
+        res.json({
+            success: true,
+            note: result.rows[0]
+        });
+    } catch (err) {
+        next(err)
+    }
+};
