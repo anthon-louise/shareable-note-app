@@ -53,3 +53,12 @@ export const getNotes = async (req: Request, res: Response, next: NextFunction) 
     }
 }
 
+export const getNoteById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = (req as any).user.id;
+
+        
+    } catch (err) {
+        next(err)
+    }
+}
