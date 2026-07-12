@@ -101,4 +101,29 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
     } catch (err) {
         next(err)
     }
-}
+};
+
+export const me = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = (req as any).user.id;
+
+        const result: QueryResult<User> = await pool.query(`
+            SELECT id, username, email, created_at
+            FROM users
+            WHERE id=$1
+            `, [userId]);
+
+        if (result.rows.length === 0) {
+            const error: any = new Error("User not found");
+            error.status = 404;
+            return next(error);
+        }
+
+        res.json({
+            success: true,
+            user: result.rows[0]
+        })
+    } catch (err) {
+        next(err);
+    }
+};

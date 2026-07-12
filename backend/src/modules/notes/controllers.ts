@@ -12,12 +12,14 @@ interface Note {
     updated_at: Date
 }
 
+
+
 export const createNote = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const validatedNote = noteSchema.parse(req.body);
         const userId = (req as any).user.id;
 
-        const result: QueryResult = await pool.query(`
+        const result: QueryResult<Note> = await pool.query(`
             INSERT INTO
             notes (user_id, title, content)
             VALUES ($1, $2, $3)
@@ -60,7 +62,7 @@ export const getNoteById = async (req: Request, res: Response, next: NextFunctio
         const noteId = req.params.id;
 
         const result: QueryResult<Note> = await pool.query(`
-            SELECT *
+            SELECT id, user_id, title, content, created_at, updated_at
             FROM notes
             WHERE user_id=$1 AND id=$2
             `, [userId, noteId]);
@@ -107,3 +109,28 @@ export const updateNote = async (req: Request, res: Response, next: NextFunction
         next(err)
     }
 };
+
+export const deleteNote = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = (req as any).user.id;
+        const noteId = req.params.id;
+
+        const result: QueryResult<{id: number}> = await pool.query(`
+            DELETE FROM notes
+            WHERE user_id=$1 AND id=$2
+            RETURNING id
+            `, [userId, noteId]);
+
+        if (result.rows.length === 0) {
+            const error: any = new Error("Note not found");
+            error.status = 404;
+            return next(error);
+        };
+
+        res.json({
+            success: true
+        });
+    } catch (err) {
+        next(err);
+    }
+}
