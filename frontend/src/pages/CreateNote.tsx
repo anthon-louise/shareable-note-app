@@ -17,7 +17,7 @@ const CreateNote = () => {
             await api.post("/api/notes/", {title, content});
             navigate("/");
         } catch (err: any) {
-            setError(err.response?.data?.error?.message);
+            setError(err.response?.data?.error?.message || "Failed to create note");
             setTimeout(() => setError(""), 1400);
         }
     }

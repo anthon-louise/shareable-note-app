@@ -10,7 +10,7 @@ const ProtectedRoute = ({children} : {children: React.ReactNode}) => {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                await api.get("/users/me");
+                await api.get("/api/users/me");
             } catch {
                 navigate("/login");
             } finally {

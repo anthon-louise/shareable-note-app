@@ -18,11 +18,17 @@ const Note = () => {
 
     const [loading, setLoading] = useState(true);
     const [loadingLogout, setLoadingLogout] = useState(false);
+    const [loadingDelete, setLoadingDelete] = useState(false);
+
     const [error, setError] = useState("");
+    const [message, setMessage] = useState("");
     
 
     useEffect(() => {
-        const fetchNotes = async () => {
+        fetchNotes();
+    }, []);
+
+            const fetchNotes = async () => {
             try {
                 const res = await api.get("/api/notes");
                 setNotes(res.data.notes);
@@ -32,12 +38,13 @@ const Note = () => {
                 setLoading(false);
             }
         }
-        fetchNotes();
-    }, []);
 
     const handleLogout = async () => {
-        setLoadingLogout(true);
         try {
+            setLoadingLogout(true);
+            setError("");
+            setMessage("");
+
             await api.post("/api/users/logout");
             navigate("/login");
         } catch {
@@ -48,6 +55,24 @@ const Note = () => {
         }
     };
 
+    const handleDelete =  async (id: number) => {
+        try {
+            setError("");
+            setMessage("");
+            setLoadingDelete(true);
+
+            await api.delete(`/api/notes/${id}`);
+            fetchNotes();
+            setMessage("Delete successfully");
+            setTimeout(() => setMessage(""), 2000);
+        } catch {
+            setError("Failed to delete note");
+            setTimeout(() => setError(""), 2000);
+        } finally {
+            setLoadingDelete(false);
+        }
+    };
+
     if (loading) return <p>Loading...</p>
 
     return (
@@ -55,6 +80,7 @@ const Note = () => {
             <h2>My notes</h2>
 
             {error && <p style={{color: "red"}}>{error}</p>}
+            {message && <p style={{color: "green"}}>{message}</p>}
 
             <button onClick={() => navigate("/create")}>Create note</button>
             <button onClick={handleLogout} disabled={loadingLogout}>Logout</button>
@@ -63,7 +89,7 @@ const Note = () => {
 
             {notes.map((note) => (
                 <div key={note.id}>
-                    <h3>{note.title}</h3>
+                    <h3>{note.title} <button onClick={() => navigate(`/edit/${note.id}`)}>📝</button> <button onClick={() => handleDelete(note.id)}>🗑️</button></h3>
                     <p>{note.content}</p>
                 </div>
             ))}
