@@ -5,6 +5,7 @@ import Note from "./pages/Note";
 import CreateNote from "./pages/CreateNote";
 import EditNote from "./pages/EditNote";
 import ProtectedRoute from "./pages/ProtectedRoute";
+import Shared from "./pages/Shared";
 
 const App = () => {
   return (
@@ -27,6 +28,11 @@ const App = () => {
           <EditNote />
         </ProtectedRoute>
         } />
+      <Route path="/:id/shares" element={
+        <ProtectedRoute>
+          <Shared/>
+        </ProtectedRoute>
+      }/>
     </Routes>
   )
 }

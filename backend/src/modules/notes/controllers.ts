@@ -255,11 +255,12 @@ export const getSharedWithNote = async (req: Request, res: Response, next: NextF
         const result = await pool.query(`
             SELECT
                 note_shares.note_id,
-                notes.title,
-                notes.content,
                 note_shares.shared_with_user_id,
                 users.username,
                 users.email,
+                notes.title,
+                notes.content,
+                users.id
             FROM notes
             JOIN note_shares
             ON notes.id = note_shares.note_id
@@ -272,6 +273,32 @@ export const getSharedWithNote = async (req: Request, res: Response, next: NextF
                 success: true,
                 shared_with: result.rows
             })
+    } catch (err) {
+        next(err);
+    }
+}
+
+export const getSharedWithMeNotes = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = (req as any).user.id;
+
+        const result = await pool.query(`
+            SELECT
+                users.id,
+                users.username,
+                users.email,
+                notes.title,
+                notes.content
+            FROM notes 
+            JOIN users ON notes.user_id=users.id
+            JOIN note_shares ON notes.id=note_shares.note_id
+            WHERE note_shares.shared_with_user_id=$1
+            `, [userId]);
+
+        res.json({
+            success: true,
+            notes: result.rows
+        })
     } catch (err) {
         next(err);
     }
