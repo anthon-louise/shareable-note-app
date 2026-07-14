@@ -17,9 +17,9 @@ const Note = () => {
 
     const [notes, setNotes] = useState<Note[]>([]);
     const [notesSharedWithMe, setNotesSharedWithMe] = useState<Note[]>([]);
-    const [notesShared, setNotesShared] = useState([]);
 
     const [loading, setLoading] = useState(true);
+    const [loadingShared, setLoadingShared] = useState(true);
     const [loadingLogout, setLoadingLogout] = useState(false);
     const [loadingDelete, setLoadingDelete] = useState(false);
 
@@ -37,7 +37,8 @@ const Note = () => {
                 const res = await api.get("/api/notes");
                 setNotes(res.data.notes);
             } catch {
-                setError("Failed to fetch notes")
+                setError("Failed to fetch notes");
+                setTimeout(() => setError(""), 2000);
             } finally {
                 setLoading(false);
             }
@@ -49,6 +50,9 @@ const Note = () => {
                 setNotesSharedWithMe(res.data.notes);
             } catch {
                 setError("Failed to fetch notes by others");
+                setTimeout(() => setError(""), 2000);
+            } finally {
+                setLoadingShared(false);
             }
         }
 
@@ -75,7 +79,7 @@ const Note = () => {
             setLoadingDelete(true);
 
             await api.delete(`/api/notes/${id}`);
-            fetchNotes();
+            await fetchNotes();
             setMessage("Delete successfully");
             setTimeout(() => setMessage(""), 2000);
         } catch {
@@ -96,7 +100,9 @@ const Note = () => {
             {message && <p style={{color: "green"}}>{message}</p>}
 
             <button onClick={() => navigate("/create")}>Create note</button>
-            <button onClick={handleLogout} disabled={loadingLogout}>Logout</button>
+            <button onClick={handleLogout} disabled={loadingLogout}>
+                {loadingLogout ? "Logging out" : "Logout"}
+            </button>
             
             {notes.length === 0 && <p>No notes yet.</p>}
 
@@ -114,13 +120,17 @@ const Note = () => {
             <br /> <br />
 
             <h4>Notes shared by others:</h4>
-            {notesSharedWithMe.map((note) => (
+            {loadingShared ? (
+                <p>Loading shared notes by others</p>
+            ) : notesSharedWithMe.length === 0 ? (
+                <p>No shared notes by others yet</p>
+            ) : (notesSharedWithMe.map((note) => (
                 <div key={note.id}>
                     <h5>{note.title}</h5> 
                     <p>{note.content} by {note.username}</p>
                 </div>
-            ))}
-            {notesSharedWithMe.length === 0 && <p>No shared notes by others yet.</p>}
+            ))
+            )}
         </div>
     )
 }
