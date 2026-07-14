@@ -247,9 +247,31 @@ export const removeNoteShare = async (req: Request, res:Response, next: NextFunc
     }
 }
 
-export const getSharedWith = async (req: Request, res: Response, next: NextFunction) => {
+export const getSharedWithNote = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        
+        const noteId = req.params.id;
+        const userId = (req as any).user.id;
+
+        const result = await pool.query(`
+            SELECT
+                note_shares.note_id,
+                notes.title,
+                notes.content,
+                note_shares.shared_with_user_id,
+                users.username,
+                users.email,
+            FROM notes
+            JOIN note_shares
+            ON notes.id = note_shares.note_id
+            JOIN users
+            ON note_shares.shared_with_user_id = users.id
+            WHERE notes.id=$1 AND notes.user_id=$2
+            `, [noteId, userId]);
+
+            res.json({
+                success: true,
+                shared_with: result.rows
+            })
     } catch (err) {
         next(err);
     }
