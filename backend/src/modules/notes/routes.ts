@@ -1,6 +1,6 @@
 import express from "express";
 import { authenticate } from "../../middlewares/authenticate";
-import { createNote, getNotes, updateNote, getNoteById, deleteNote } from "./controllers";
+import { createNote, getNotes, updateNote, getNoteById, deleteNote, shareNote, removeNoteShare } from "./controllers";
 
 const router = express.Router();
 
@@ -9,5 +9,8 @@ router.get("/", authenticate, getNotes);
 router.get("/:id", authenticate, getNoteById);
 router.put("/:id", authenticate, updateNote);
 router.delete("/:id", authenticate, deleteNote);
+
+router.post("/:id/share", authenticate, shareNote);
+router.delete("/:id/share/:userId", authenticate, removeNoteShare);
 
 export default router;

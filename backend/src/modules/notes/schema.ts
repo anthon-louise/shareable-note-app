@@ -9,3 +9,8 @@ export const noteSchema = z.object({
         z.string()
         .min(1, "Content is required")
 });
+
+export const shareNoteSchema = z.object({
+    email:
+        z.email({message: "Invalid email"})
+});

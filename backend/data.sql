@@ -16,3 +16,11 @@ CREATE TABLE notes (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE note_shares (
+    id SERIAL PRIMARY KEY, --pk
+    note_id INTEGER NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
+    shared_with_user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (note_id, shared_with_user_id)
+);
