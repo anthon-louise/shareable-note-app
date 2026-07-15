@@ -224,7 +224,7 @@ const Note = () => {
                                         padding: "10px 15px",
                                         fontSize: "20px",
                                         cursor: "pointer"
-                                    }}>Edit📝</button>
+                                    }}>Edit</button>
                                 <button
                                     disabled={loadingDelete}
                                     onClick={() => handleDelete(note.id)}
@@ -237,7 +237,7 @@ const Note = () => {
                                         fontSize: "20px",
                                         cursor: "pointer"
                                     }}
-                                >Delete🗑️</button>
+                                >Delete</button>
                                 <button
                                     onClick={() => navigate(`/${note.id}/shares`)}
                                     style={{
@@ -249,7 +249,7 @@ const Note = () => {
                                         fontSize: "20px",
                                         cursor: "pointer"
                                     }}
-                                >View👁️</button>
+                                >View</button>
                             </span>
                         </h3>
 

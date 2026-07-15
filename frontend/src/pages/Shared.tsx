@@ -72,39 +72,174 @@ const Shared = () => {
         }
     }
 
-    if (loadingShares) return <p>Loading...</p>
+    if (loadingShares) return <p
+        style={{
+            textAlign: "center",
+            fontSize: "80px",
+            color: "#358938",
+            marginTop: "100px"
+        }}>Loading...</p>
 
     return (
-        <div>
-            <button onClick={() => navigate("/")}>Back</button>
+        <div
+            style={{
+                maxWidth: "800px",
+                margin: "30px auto",
+                padding: "30px",
+                background: "#428c44",
+                borderRadius: "20px",
+                fontFamily: "system-ui, Arial, sans-serif"
+            }}>
+            <h2 style={{
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "60px",
+                marginBottom: "20px"
+            }}>Share Note</h2>
 
-            {error && <p style={{ color: "red" }}>{error}</p>}
-            {message && <p style={{ color: "green" }}>{message}</p>}
+            {error && <p
+                style={{
+                    color: "red",
+                    background: "#ecbec5",
+                    padding: "10px",
+                    textAlign: "center",
+                    borderRadius: "5px",
+                    fontSize: "20px"
+                }}>{error}</p>}
 
-            <form onSubmit={handleSubmit}>
+            {message && <p
+                style={{
+                    color: "green",
+                    background: "#b3ded1",
+                    padding: "10px",
+                    textAlign: "center",
+                    borderRadius: "5px",
+                    fontSize: "20px"
+                }}>{message}</p>}
+
+
+            <form
+                onSubmit={handleSubmit}
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "20px",
+                    marginBottom: "30px"
+                }}>
+
                 <input
                     type="text"
                     value={email}
                     placeholder="Email"
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loadingShare}
-                />
-                <button disabled={loadingShare}>
-                    {loadingShare ? "Sharing" : "Share"}
-                </button>
+                    style={{
+                        padding: "15px",
+                        fontSize: "20px",
+                        borderRadius: "10px",
+                        border: "none",
+                        outline: "none",
+                        background: "rgba(255,255,255,0.9)",
+                        color: "#333"
+                    }} />
+
+                <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    gap: "15px",
+                    flexWrap: "wrap"
+                }}>
+
+                    <button
+                        type="submit"
+                        disabled={loadingShare}
+                        style={{
+                            background: "#ffffff",
+                            color: "#428c44",
+                            border: "none",
+                            borderRadius: "5px",
+                            padding: "15px 30px",
+                            fontSize: "20px",
+                            cursor: "pointer"
+                        }}>
+                        {loadingShare ? "Sharing" : "Share"}
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => navigate("/")}
+                        style={{
+                            background: "#ffffff",
+                            color: "#428c44",
+                            border: "none",
+                            borderRadius: "5px",
+                            padding: "15px 30px",
+                            fontSize: "20px",
+                            cursor: "pointer"
+                        }}>Back</button>
+                </div>
+
             </form>
 
-            {notes.length === 0 ? (
-                <p>This notes is not shared</p>
-            ) : (
-                <div>
-                    <h3>Notes shared with:</h3>
+            <h3 style={{
+                color: "#ffffff",
+                fontSize: "30px",
+                textAlign: "center",
+                marginBottom: "20px"
+            }}>Currently shared with:</h3>
 
-                    {notes.map((note) => (
-                        <div key={note.id}>
-                            <p>{note.email} <button disabled={loadingDelete} onClick={() => handleDelete(note.shared_with_user_id)}>🗑️</button></p>
-                        </div>))}
-                </div>)
+            {notes.length === 0 ? (
+
+                <p
+                    style={{
+                        textAlign: "center",
+                        color: "white",
+                        fontSize: "20x",
+                        padding: "20px",
+                        background: "rgba(255,255,255,0.1)",
+                        borderRadius: "10px"
+                    }}>This notes is not shared with anyone yet</p>
+
+            ) : (
+
+                notes.map((note) => (
+
+                    <div
+                        key={note.shared_with_user_id}
+                        style={{
+                            background: "rgba(255,255,255,0.15)",
+                            borderRadius: "15px",
+                            padding: "15px 20px",
+                            marginBottom: "20px",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            flexWrap: "wrap",
+                            gap: "10px"
+                        }}>
+
+                        <span style={{
+                            color: "#ffffff",
+                            fontSize: "20px"
+                        }}>
+                            {note.email}
+                        </span>
+
+                        <button
+                        disabled={loadingDelete}
+                        onClick={() => handleDelete(note.shared_with_user_id)}
+                        style={{
+                            background: "#d33131",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "5px",
+                            padding: "10px 15px",
+                            fontSize: "20px",
+                            cursor: "pointer"
+                        }}>Remove</button>
+
+                    </div>))
+            )
             }
         </div>
     )
