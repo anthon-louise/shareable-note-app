@@ -63,8 +63,8 @@ const Register = () => {
                     }}>
                         {error}
                     </p>
-
                 }
+                
                 {message &&
                     <p style={{
                         color: "green",
@@ -156,7 +156,7 @@ const Register = () => {
                             color: "#2844aa",
                             textDecoration: "none"
                         }}>
-                        Register...
+                        Login...
                     </Link>
                 </div>
             </form>
