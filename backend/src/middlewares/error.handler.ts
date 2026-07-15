@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { success, ZodError } from "zod";
+import { ZodError } from "zod";
 
+// Fetching status code and message
+// Then sending it to user
 export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
     const statusCode = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error"

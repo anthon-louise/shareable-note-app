@@ -4,6 +4,9 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+// Extract cookie from token
+// Verifying the token
+// Decodes the token and set to req.user
 export const authenticate = (req: Request, res: Response, next: NextFunction) => {
     try {
         const token = req.cookies?.token;
