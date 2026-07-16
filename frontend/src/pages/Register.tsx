@@ -97,7 +97,8 @@ const Register = () => {
                         borderRadius: "5px",
                         boxSizing: "border-box",
                         fontSize: "20px",
-                        color: "#2b473f"
+                        color: "#2b473f",
+                        outline: "none"
                     }}/>
 
                 {/* email input */}
@@ -114,7 +115,8 @@ const Register = () => {
                         borderRadius: "5px",
                         boxSizing: "border-box",
                         fontSize: "20px",
-                        color: "#2b473f"
+                        color: "#2b473f",
+                        outline: "none"
                     }}/>
 
                 {/* password input */}
@@ -131,7 +133,8 @@ const Register = () => {
                         borderRadius: "5px",
                         boxSizing: "border-box",
                         fontSize: "20px",
-                        color: "#2b473f"
+                        color: "#2b473f",
+                        outline: "none"
                     }}
                 />
 

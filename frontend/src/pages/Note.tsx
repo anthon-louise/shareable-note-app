@@ -349,11 +349,15 @@ const Note = () => {
                             fontSize: "20px"
                         }}>{note.content}
                         <span style={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            fontSize: "14px",
+                            color: "#c8e6c9",
                             fontStyle: "italic",
                             opacity: "0.8",
-                            fontSize: "12px",
-                            float: "right",
-                            marginTop: "40px"
+                            borderTop: "1px solid rgba(255,255,255,0.1)",
+                            paddingTop: "8px",
+                            marginTop: "8px"
                         }}> by {note.username}</span>
                     </p>
                 </div>

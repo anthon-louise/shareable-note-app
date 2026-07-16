@@ -102,7 +102,8 @@ const Login = () => {
                         borderRadius: "5px",
                         boxSizing: "border-box",
                         fontSize: "20px",
-                        color: "#2b473f"
+                        color: "#2b473f",
+                        outline: "none"
                     }} />
 
                 {/* password input */}
@@ -119,7 +120,8 @@ const Login = () => {
                         borderRadius: "5px",
                         boxSizing: "border-box",
                         fontSize: "20px",
-                        color: "#2b473f"
+                        color: "#2b473f",
+                        outline: "none"
                     }} />
 
                 {/* submit button */}
