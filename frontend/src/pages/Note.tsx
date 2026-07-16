@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import api from "../api/axios";
 
+// defines the note object
 interface Note {
     id: number,
     user_id: number,
@@ -12,29 +13,35 @@ interface Note {
     username?: string
 }
 
+// Page for note list and shared notes list
 const Note = () => {
     const navigate = useNavigate();
 
+    // usestates for storing data
     const [notes, setNotes] = useState<Note[]>([]);
     const [notesSharedWithMe, setNotesSharedWithMe] = useState<Note[]>([]);
 
+    // usestates for message, error and loading
+    const [message, setMessage] = useState("");
+    const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
     const [loadingShared, setLoadingShared] = useState(true);
     const [loadingLogout, setLoadingLogout] = useState(false);
     const [loadingDelete, setLoadingDelete] = useState(false);
 
-    const [error, setError] = useState("");
-    const [message, setMessage] = useState("");
-
-
+    // fetch notes when component mounts
     useEffect(() => {
         fetchNotes();
         fetchNotesSharedWithMe();
     }, []);
 
+    // Function for fetching notes
     const fetchNotes = async () => {
         try {
+
+            // fetch note from database
             const res = await api.get("/api/notes");
+
             setNotes(res.data.notes);
         } catch {
             setError("Failed to fetch notes");
@@ -44,9 +51,13 @@ const Note = () => {
         }
     }
 
+    // Function for fetching notes shared with me
     const fetchNotesSharedWithMe = async () => {
         try {
+
+            // fetch notes shared with me from database
             const res = await api.get("/api/notes/sharedwithme");
+
             setNotesSharedWithMe(res.data.notes);
         } catch {
             setError("Failed to fetch notes by others");
@@ -56,12 +67,14 @@ const Note = () => {
         }
     }
 
+    // FUnction for user logout
     const handleLogout = async () => {
         try {
             setLoadingLogout(true);
             setError("");
             setMessage("");
 
+            // clears the token in cookie
             await api.post("/api/users/logout");
             navigate("/login");
         } catch {
@@ -72,14 +85,19 @@ const Note = () => {
         }
     };
 
+    // Function for note deletion
     const handleDelete = async (id: number) => {
         try {
             setError("");
             setMessage("");
             setLoadingDelete(true);
 
+            // delete note in database
             await api.delete(`/api/notes/${id}`);
+
+            // refresh notes after deletion
             await fetchNotes();
+
             setMessage("Delete successfully");
             setTimeout(() => setMessage(""), 2000);
         } catch {
@@ -90,6 +108,8 @@ const Note = () => {
         }
     };
 
+
+    // if fetching notes then loading
     if (loading) return <p
         style={{
             textAlign: "center",
@@ -111,16 +131,16 @@ const Note = () => {
                 fontFamily: "system-ui, Arial, sans-serif"
             }}>
 
+            {/* my notes title */}
             <h2
                 style={{
                     textAlign: "center",
                     color: "#ffffff",
                     fontSize: "70px",
                     marginBottom: "30px"
-                }}>
-                My notes
-            </h2>
+                }}>My notes</h2>
 
+            {/* error notification */}
             {error &&
                 <p
                     style={{
@@ -132,6 +152,7 @@ const Note = () => {
                         fontSize: "20px"
                     }}>{error}</p>}
 
+            {/* message notification */}
             {message &&
                 <p
                     style={{
@@ -152,6 +173,7 @@ const Note = () => {
                     flexWrap: "wrap"
                 }}>
 
+                {/* navigate to create page */}
                 <button
                     onClick={() => navigate("/create")}
                     style={{
@@ -164,6 +186,7 @@ const Note = () => {
                         cursor: "pointer"
                     }}>Create note</button>
 
+                {/* logout button */}
                 <button
                     onClick={handleLogout}
                     disabled={loadingLogout}
@@ -178,7 +201,8 @@ const Note = () => {
                     }}>{loadingLogout ? "Logging out" : "Logout"}</button>
             </div>
 
-
+            {/* if notes is empty display empty message */}
+            {/* is notes is note emprt then display list */}
             {notes.length === 0 ? (
                 <p
                     style={{
@@ -199,6 +223,8 @@ const Note = () => {
                             padding: "20px",
                             marginBottom: "20px"
                         }}>
+
+                        {/* note title */}
                         <h3 style={{
                             color: "#2b473f",
                             fontSize: "25px",
@@ -207,13 +233,14 @@ const Note = () => {
                             alignItems: "center",
                             flexWrap: "wrap",
                             gap: "10px"
-                        }}>
-                            {note.title}
+                        }}>{note.title}
                             <span style={{
                                 display: "flex",
                                 gap: "8px",
                                 marginLeft: "auto"
                             }}>
+
+                                {/* navigate to edit for specific note */}
                                 <button
                                     onClick={() => navigate(`/edit/${note.id}`)}
                                     style={{
@@ -225,6 +252,8 @@ const Note = () => {
                                         fontSize: "20px",
                                         cursor: "pointer"
                                     }}>Edit</button>
+
+                                {/* delete a specific note button */}
                                 <button
                                     disabled={loadingDelete}
                                     onClick={() => handleDelete(note.id)}
@@ -236,8 +265,9 @@ const Note = () => {
                                         padding: "10px 15px",
                                         fontSize: "20px",
                                         cursor: "pointer"
-                                    }}
-                                >Delete</button>
+                                    }}>Delete</button>
+
+                                {/* navigate to shared users page */}
                                 <button
                                     onClick={() => navigate(`/${note.id}/shares`)}
                                     style={{
@@ -248,11 +278,11 @@ const Note = () => {
                                         padding: "10px 15px",
                                         fontSize: "20px",
                                         cursor: "pointer"
-                                    }}
-                                >View</button>
+                                    }}>View</button>
                             </span>
                         </h3>
 
+                        {/* note content */}
                         <p style={{
                             color: "#555",
                             fontSize: "20px",
@@ -266,6 +296,7 @@ const Note = () => {
 
             <br /> <br />
 
+            {/* noteshared by others title */}
             <h4
                 style={{
                     color: "#ffffff",
@@ -273,6 +304,10 @@ const Note = () => {
                     textAlign: "center",
                     marginBottom: "20px"
                 }}>Notes shared by others:</h4>
+
+            {/* if loading fetch notes shared by others then display loading message */}
+            {/* if notes shared by others is empty then display empty message */}
+            {/* if notes shared by others is not empty then show list */}
             {loadingShared ? (
                 <p
                     style={{

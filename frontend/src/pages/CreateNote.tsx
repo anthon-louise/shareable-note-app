@@ -2,17 +2,20 @@ import { useState } from "react";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
+// Page for creating note
 const CreateNote = () => {
     const navigate = useNavigate();
 
+    // usestates for storing data
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
 
+    // error, message and loading usestates
     const [error, setError] = useState("");
     const [message, setMessage] = useState("");
-
     const [loading, setLoading] = useState(false);
 
+    // Function for creating notes
     const handleSubmit = async (e: any) => {
         try {
             e.preventDefault();
@@ -20,7 +23,9 @@ const CreateNote = () => {
             setError("");
             setMessage("");
 
+            // create a new note in the database
             await api.post("/api/notes/", { title, content });
+            
             setMessage("Note created");
             setTimeout(() => setMessage(""), 2000)
             setTimeout(() => navigate("/"), 1000)
@@ -42,6 +47,8 @@ const CreateNote = () => {
                 borderRadius: "20px",
                 fontFamily: "system-ui, Arial, sans-serif"
             }}>
+
+            {/* create note title */}
             <h2
                 style={{
                     textAlign: "center",
@@ -49,6 +56,8 @@ const CreateNote = () => {
                     fontSize: "60px",
                     marginBottom: "20px"
                 }}>Create note</h2>
+
+            {/* error notification */}
             {error &&
                 <p
                     style={{
@@ -60,6 +69,7 @@ const CreateNote = () => {
                         fontSize: "20px"
                     }}>{error}</p>}
 
+            {/* message notification */}
             {message &&
                 <p
                     style={{
@@ -71,6 +81,7 @@ const CreateNote = () => {
                         fontSize: "20px"
                     }}>{message}</p>}
 
+            {/* form for creating a note */}
             <form
                 onSubmit={handleSubmit}
                 style={{
@@ -78,7 +89,8 @@ const CreateNote = () => {
                     flexDirection: "column",
                     gap: "20px"
                 }}>
-
+                
+                {/* title input */}
                 <input
                     type="text"
                     placeholder="Title"
@@ -94,6 +106,8 @@ const CreateNote = () => {
                         background: "rgba(255,255,255,255,0.9)",
                         color: "#333"
                     }} />
+
+                {/* content input */}
                 <textarea
                     rows={6}
                     placeholder="Content"
@@ -119,6 +133,7 @@ const CreateNote = () => {
                     marginTop: "10px"
                 }}>
 
+                    {/* submit button */}
                     <button
                         type="submit"
                         disabled={loading}
@@ -132,6 +147,7 @@ const CreateNote = () => {
                             cursor: "pointer"
                         }}>{loading ? "Submitting" : "Submit"}</button>
 
+                    {/* back button */}
                     <button
                         onClick={() => navigate("/")}
                         style={{

@@ -2,23 +2,31 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/axios";
 
+// Page for editing note
 const EditNote = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
+    // usestate for storing data
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
 
+    // usestate for error, message and loading
     const [error, setError] = useState("");
     const [message, setMessage] = useState("");
-
     const [loading, setLoading] = useState(true);
     const [loadingUpdate, setLoadingUpdate] = useState(false);
 
+
     useEffect(() => {
+
+        // Function for fetching title and content from database
         const fetchNotes = async () => {
             try {
+
+                // fetch title and content of the note
                 const res = await api.get(`/api/notes/${id}`);
+
                 setTitle(res.data.note.title);
                 setContent(res.data.note.content);
             } catch (err: any) {
@@ -31,6 +39,7 @@ const EditNote = () => {
         fetchNotes();
     }, [id])
 
+    // Function for updating the note
     const handleSubmit = async (e: any) => {
         try {
             e.preventDefault();
@@ -38,7 +47,9 @@ const EditNote = () => {
             setError("");
             setMessage("");
 
+            // update note in database
             await api.put(`/api/notes/${id}`, { title, content });
+
             setMessage("Note edited")
             setTimeout(() => navigate("/"), 1000);
             setTimeout(() => setMessage(""), 2000);
@@ -50,6 +61,7 @@ const EditNote = () => {
         }
     }
 
+    // load if fetching notes
     if (loading) return <p
         style={{
             textAlign: "center",
@@ -68,7 +80,8 @@ const EditNote = () => {
                 borderRadius: "20px",
                 fontFamily: "system-ui, Arial, sans-serif"
             }}>
-
+            
+            {/* edit note title */}
             <h2
                 style={{
                     textAlign: "center",
@@ -77,6 +90,7 @@ const EditNote = () => {
                     marginBottom: "20px"
                 }}>Edit Note</h2>
 
+            {/* error notification */}
             {error &&
                 <p
                     style={{
@@ -88,6 +102,7 @@ const EditNote = () => {
                         fontSize: "20px"
                     }}>{error}</p>}
 
+            {/* message notification */}
             {message &&
                 <p
                     style={{
@@ -99,6 +114,7 @@ const EditNote = () => {
                         fontSize: "20px"
                     }}>{message}</p>}
 
+            {/* form for updating note */}
             <form
                 onSubmit={handleSubmit}
                 style={{
@@ -106,6 +122,8 @@ const EditNote = () => {
                     flexDirection: "column",
                     gap: "20px"
                 }}>
+
+                {/* title input */}
                 <input
                     type="text"
                     placeholder="Title"
@@ -122,6 +140,7 @@ const EditNote = () => {
                         color: "#333"
                     }} />
 
+                {/* content input */}
                 <textarea
                     placeholder="Content"
                     rows={6}
@@ -148,6 +167,7 @@ const EditNote = () => {
                         marginTop: "10px"
                     }}>
 
+                    {/* cancel edit button */}
                     <button
                         type="button" onClick={() => navigate("/")}
                         style={{
@@ -159,6 +179,8 @@ const EditNote = () => {
                             fontSize: "20px",
                             cursor: "pointer"
                         }}>Cancel</button>
+
+                    {/* submit button */}
                     <button
                         type="submit"
                         disabled={loadingUpdate}

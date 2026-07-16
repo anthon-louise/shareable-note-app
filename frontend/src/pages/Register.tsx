@@ -2,24 +2,30 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/axios";
 
+// Page for user registration
 const Register = () => {
+
+    // usestate for storing data
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
 
-    const [error, setError] = useState("");
+    // usestate for message, error and loading
     const [message, setMessage] = useState("");
+    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
+    // Function for registering a user
     const handleSubmit = async (e: any) => {
-        e.preventDefault();
-
-        setLoading(true);
-        setError("");
-        setMessage("");
-
         try {
+            e.preventDefault();
+            setLoading(true);
+            setError("");
+            setMessage("");
+
+            // create user account in database
             await api.post('/api/users/register', { username, email, password });
+
             setMessage("User created")
             setTimeout(() => setMessage(""), 2000);
         } catch (err: any) {
@@ -29,6 +35,7 @@ const Register = () => {
             setLoading(false);
         }
     }
+
     return (
         <div
             style={{
@@ -40,7 +47,10 @@ const Register = () => {
                 borderRadius: "20px"
             }}>
 
+            {/* Form for registering a user */}
             <form onSubmit={handleSubmit}>
+
+                {/* regiter title */}
                 <h2
                     style={{
                         textAlign: "center",
@@ -48,10 +58,9 @@ const Register = () => {
                         color: "#ffffff",
                         fontWeight: "600",
                         fontSize: "60px"
-                    }}>
-                    Register
-                </h2>
+                    }}>Register</h2>
 
+                {/* error notification */}
                 {error &&
                     <p style={{
                         color: "red",
@@ -60,11 +69,10 @@ const Register = () => {
                         textAlign: "center",
                         borderRadius: "5px",
                         fontSize: "20px"
-                    }}>
-                        {error}
-                    </p>
+                    }}>{error}</p>
                 }
-                
+
+                {/* message notification */}
                 {message &&
                     <p style={{
                         color: "green",
@@ -73,10 +81,9 @@ const Register = () => {
                         textAlign: "center",
                         borderRadius: "5px",
                         fontSize: "20px"
-                    }}>
-                        {message}
-                    </p>}
+                    }}>{message}</p>}
 
+                {/* username input */}
                 <input
                     type="text"
                     placeholder="Username"
@@ -91,9 +98,9 @@ const Register = () => {
                         boxSizing: "border-box",
                         fontSize: "20px",
                         color: "#2b473f"
-                    }}
-                />
+                    }}/>
 
+                {/* email input */}
                 <input
                     type="text"
                     placeholder="Email"
@@ -108,9 +115,9 @@ const Register = () => {
                         boxSizing: "border-box",
                         fontSize: "20px",
                         color: "#2b473f"
-                    }}
-                />
+                    }}/>
 
+                {/* password input */}
                 <input
                     type="password"
                     placeholder="Password"
@@ -128,6 +135,7 @@ const Register = () => {
                     }}
                 />
 
+                {/* submit button */}
                 <button
                     type="submit"
                     disabled={loading}
@@ -140,10 +148,9 @@ const Register = () => {
                         border: "none",
                         borderRadius: "5px",
                         padding: "10px"
-                    }}>
-                    Register
-                </button>
+                    }}>Register</button>
 
+                {/* link to login */}
                 <div
                     style={{
                         textAlign: "center",

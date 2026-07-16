@@ -10,29 +10,41 @@ import Shared from "./pages/Shared";
 const App = () => {
   return (
     <Routes>
+
+      {/* register page route */}
       <Route path="/register" element={<Register />} />
+
+      {/* login page route */}
       <Route path="/login" element={<Login />} />
 
+      {/* note page route */}
       <Route path="/" element={
         <ProtectedRoute>
           <Note />
         </ProtectedRoute>
         } />
+
+      {/* create note page route */}
       <Route path="/create" element={
         <ProtectedRoute>
           <CreateNote />
         </ProtectedRoute>
         } />
+
+      {/* edit note page route */}
       <Route path="/edit/:id" element={
         <ProtectedRoute>
           <EditNote />
         </ProtectedRoute>
         } />
+
+      {/* share note page route */}
       <Route path="/:id/shares" element={
         <ProtectedRoute>
           <Shared/>
         </ProtectedRoute>
       }/>
+      
     </Routes>
   )
 }

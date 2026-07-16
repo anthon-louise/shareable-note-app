@@ -2,24 +2,30 @@ import { useState } from "react";
 import api from "../api/axios";
 import { Link, useNavigate } from "react-router-dom";
 
+// Page for user login
 const Login = () => {
     const navigate = useNavigate();
+
+    // usestates for storing data
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    // usestates for error, message and loading
     const [error, setError] = useState("");
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
 
+    // Function for user login
     const handleSubmit = async (e: any) => {
         try {
             e.preventDefault();
-
             setLoading(true);
             setError("");
             setMessage("");
 
+            // logs in the user
             await api.post("/api/users/login", { email, password });
+
             setMessage("User logged in");
             setTimeout(() => navigate("/"), 1000);
             setTimeout(() => setMessage(""), 1000);
@@ -40,7 +46,11 @@ const Login = () => {
             border: "none",
             borderRadius: "20px"
         }}>
+
+            {/* login form */}
             <form onSubmit={handleSubmit}>
+
+                {/* login title */}
                 <h2
                     style={{
                         textAlign: "center",
@@ -48,10 +58,9 @@ const Login = () => {
                         color: "#ffffff",
                         fontWeight: "600",
                         fontSize: "60px"
-                    }}>
-                    Login
-                </h2>
+                    }}>Login</h2>
 
+                {/* error notification */}
                 {error &&
                     <p
                         style={{
@@ -61,11 +70,10 @@ const Login = () => {
                             textAlign: "center",
                             borderRadius: "5px",
                             fontSize: "20px"
-                        }}>
-                        {error}
-                    </p>
+                        }}>{error}</p>
                 }
 
+                {/* message notification */}
                 {message &&
                     <p
                         style={{
@@ -80,6 +88,7 @@ const Login = () => {
                     </p>
                 }
 
+                {/* email input */}
                 <input
                     type="text"
                     placeholder="Email"
@@ -96,6 +105,7 @@ const Login = () => {
                         color: "#2b473f"
                     }} />
 
+                {/* password input */}
                 <input
                     type="password"
                     placeholder="Password"
@@ -112,6 +122,7 @@ const Login = () => {
                         color: "#2b473f"
                     }} />
 
+                {/* submit button */}
                 <button
                     type="submit"
                     disabled={loading}
@@ -124,16 +135,14 @@ const Login = () => {
                         border: "none",
                         borderRadius: "5px",
                         padding: "10px"
-                    }}>
-                    Login
-                </button>
+                    }}>Login</button>
 
+                {/* register link */}
                 <div
                     style={{
                         textAlign: "center",
                         marginTop: "10px"
-                    }}>
-                    Don't have an account yet?
+                    }}>Don't have an account yet?
                     <Link
                         to="/register"
                         style={{

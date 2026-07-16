@@ -3,28 +3,34 @@ import { useEffect, useState } from "react";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
+// Page for sharing note and viewing the list of shared people
 const Shared = () => {
+    const navigate = useNavigate();
+    const { id } = useParams();
+
+    // usestate for storing data
     const [notes, setNotes] = useState<any[]>([]);
     const [email, setEmail] = useState("");
 
-    const [error, setError] = useState("");
+    // usestate for message, error and loading
     const [message, setMessage] = useState("");
-
+    const [error, setError] = useState("");
     const [loadingShares, setLoadingShares] = useState(true);
     const [loadingShare, setLoadingShare] = useState(false);
     const [loadingDelete, setLoadingDelete] = useState(false);
 
-
-    const navigate = useNavigate();
-    const { id } = useParams();
-
+    // refetch every mount
     useEffect(() => {
         fetchNotes();
     }, []);
 
+    // Function for fetching users who are shared with
     const fetchNotes = async () => {
         try {
+
+            // get the users who are shared with in database
             const res = await api.get(`/api/notes/${id}/shares`)
+
             setNotes(res.data.shared_with)
         } catch {
             setError("Failed to fetch notes");
@@ -34,14 +40,19 @@ const Shared = () => {
         }
     }
 
+    // Function for removing share
     const handleDelete = async (userId: number) => {
         try {
             setLoadingDelete(true);
             setMessage("");
             setError("");
 
+            // removing share in database
             await api.delete(`/api/notes/${id}/share/${userId}`)
+
+            // refetch notes
             await fetchNotes();
+
             setMessage("Share deleted");
             setTimeout(() => setMessage(""), 2000);
         } catch {
@@ -52,6 +63,7 @@ const Shared = () => {
         }
     }
 
+    // Function for sharing note to another user
     const handleSubmit = async (e: any) => {
         try {
             e.preventDefault();
@@ -59,8 +71,9 @@ const Shared = () => {
             setMessage("");
             setError("");
 
+            // share note to another user
             await api.post(`/api/notes/${id}/share`, { email });
-            setEmail("");
+
             await fetchNotes();
             setMessage("Note shared");
             setTimeout(() => setMessage(""), 2000);
@@ -72,6 +85,7 @@ const Shared = () => {
         }
     }
 
+    // if user shares is loading then display loading message
     if (loadingShares) return <p
         style={{
             textAlign: "center",
@@ -90,6 +104,8 @@ const Shared = () => {
                 borderRadius: "20px",
                 fontFamily: "system-ui, Arial, sans-serif"
             }}>
+
+            {/* share note title */}
             <h2 style={{
                 textAlign: "center",
                 color: "#ffffff",
@@ -97,6 +113,7 @@ const Shared = () => {
                 marginBottom: "20px"
             }}>Share Note</h2>
 
+            {/* error notification */}
             {error && <p
                 style={{
                     color: "red",
@@ -107,6 +124,7 @@ const Shared = () => {
                     fontSize: "20px"
                 }}>{error}</p>}
 
+            {/* message notification */}
             {message && <p
                 style={{
                     color: "green",
@@ -117,7 +135,7 @@ const Shared = () => {
                     fontSize: "20px"
                 }}>{message}</p>}
 
-
+            {/* form for sharing note */}
             <form
                 onSubmit={handleSubmit}
                 style={{
@@ -127,6 +145,7 @@ const Shared = () => {
                     marginBottom: "30px"
                 }}>
 
+                {/* email input */}
                 <input
                     type="text"
                     value={email}
@@ -150,6 +169,7 @@ const Shared = () => {
                     flexWrap: "wrap"
                 }}>
 
+                    {/* share button */}
                     <button
                         type="submit"
                         disabled={loadingShare}
@@ -161,10 +181,9 @@ const Shared = () => {
                             padding: "15px 30px",
                             fontSize: "20px",
                             cursor: "pointer"
-                        }}>
-                        {loadingShare ? "Sharing" : "Share"}
-                    </button>
+                        }}>{loadingShare ? "Sharing" : "Share"}</button>
 
+                    {/* back button */}
                     <button
                         type="button"
                         onClick={() => navigate("/")}
@@ -178,9 +197,9 @@ const Shared = () => {
                             cursor: "pointer"
                         }}>Back</button>
                 </div>
-
             </form>
 
+            {/* currently shared with title */}
             <h3 style={{
                 color: "#ffffff",
                 fontSize: "30px",
@@ -188,8 +207,9 @@ const Shared = () => {
                 marginBottom: "20px"
             }}>Currently shared with:</h3>
 
+            {/* if note is empty display loading message*/}
+            {/* if note is not empty display the users email with remove button */}
             {notes.length === 0 ? (
-
                 <p
                     style={{
                         textAlign: "center",
@@ -203,7 +223,6 @@ const Shared = () => {
             ) : (
 
                 notes.map((note) => (
-
                     <div
                         key={note.shared_with_user_id}
                         style={{
@@ -226,17 +245,17 @@ const Shared = () => {
                         </span>
 
                         <button
-                        disabled={loadingDelete}
-                        onClick={() => handleDelete(note.shared_with_user_id)}
-                        style={{
-                            background: "#d33131",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "5px",
-                            padding: "10px 15px",
-                            fontSize: "20px",
-                            cursor: "pointer"
-                        }}>Remove</button>
+                            disabled={loadingDelete}
+                            onClick={() => handleDelete(note.shared_with_user_id)}
+                            style={{
+                                background: "#d33131",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "5px",
+                                padding: "10px 15px",
+                                fontSize: "20px",
+                                cursor: "pointer"
+                            }}>Remove</button>
 
                     </div>))
             )
