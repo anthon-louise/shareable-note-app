@@ -1,14 +1,17 @@
 import { Request, Response, NextFunction } from "express";
 import { ZodError } from "zod";
 
-// Fetching status code and message
-// Then sending it to user
+// This is function handles error that are thrown in the application
 export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
-    const statusCode = err.status || err.statusCode || 500;
+
+    // status code and message are the properties defined with the error instance
+    const statusCode = err.status || 500;
     const message = err.message || "Internal Server Error"
     
-    console.error(`Error: ${err}, Status: ${statusCode}, message: ${message}`);
+    // logs the error details for debugging
+   console.error(`Error: ${err}, Status: ${statusCode}, message: ${message}`);
 
+    // if the error is from zod then show zod error message
     if (err instanceof ZodError) {
         return res.status(400).json({
             success: false,
@@ -18,6 +21,7 @@ export const errorHandler = (err: any, req: Request, res: Response, next: NextFu
         })
     }
 
+    // general response object for errors passed
     res.status(statusCode).json({
         success: false,
         error: {

@@ -1,5 +1,6 @@
 import {z} from "zod";
 
+// creating a user schema
 export const registerUserSchema = z.object({
     username:
         z.string()
@@ -15,6 +16,7 @@ export const registerUserSchema = z.object({
         .max(100, "Password too long"),
 });
 
+// login user schema
 export const loginUserSchema = z.object({
     email:
         z.email("Please provide email")

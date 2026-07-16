@@ -1,5 +1,6 @@
 import z from "zod";
 
+// note schema
 export const noteSchema = z.object({
     title:
         z.string()
@@ -10,6 +11,7 @@ export const noteSchema = z.object({
         .min(1, "Content is required")
 });
 
+// share note schema
 export const shareNoteSchema = z.object({
     email:
         z.email({message: "Invalid email"})
