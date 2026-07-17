@@ -5,10 +5,10 @@ This is my first serious project, a simple but handy notes app I built from scra
 ## 💡 What I Learned
 
 - Basic CRUD operations (create, read, update, delete) for managing notes
-- TypeScript fundamentals across both frontend and backend
+- Basic TypeScript across both frontend and backend
 - Many-to-many relationships in PostgreSQL for the note sharing system
-- Basic CSS styling to build a clean and responsive UI
-- Handling multiple users with authentication, protected routes, and per-user data
+- Basic CSS styling to build a clean UI
+- Handling multiple users with authentication and protected routes
 - JWT authentication with HTTP-only cookies for secure sessions
 - Input validation using Zod on the backend
 - Building RESTful APIs with Express
