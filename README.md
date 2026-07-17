@@ -137,3 +137,19 @@ Go to [http://localhost:5173](http://localhost:5173) in your browser. Register a
 - `DELETE /api/notes/:id/share/:userId` — Remove someone's access to a shared note
 - `GET /api/notes/:id/shares` — See who you've shared a note with
 - `GET /api/notes/sharedwithme` — See all notes others have shared with you
+
+## 📸 Screenshots
+
+![Login](screenshots/login.png)
+
+![Register](screenshots/register.png)
+
+![Note List](screenshots/notelist.png)
+
+![Create Note](screenshots/notecreate.png)
+
+![Update Note](screenshots/noteupdate.png)
+
+![Share Note](screenshots/noteshare.png)
+
+![Shared Notes](screenshots/sharedlist.png)
